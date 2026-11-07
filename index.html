@@ -88,7 +88,7 @@ input:focus,textarea:focus,button:focus-visible,.cell:focus-visible,.pill:focus-
 </head>
 <body>
 <div class="ide">
- <div class="top"><div class="logo">PC</div><span class="proj">Progress</span><span class="br">⎇ master</span><span class="sp"></span><span class="br" id="clock"></span><button class="run" id="runBtn">▶ Today</button></div>
+ <div class="top"><div class="logo">PC</div><span class="proj">Progress</span><span class="br">⎇ master</span><span class="sp"></span><span class="br" id="clock"></span><button class="run" id="runBtn">▶ Month</button></div>
  <div class="body">
   <nav class="strip" aria-label="Tools">
    <button class="tool on" data-v="cal" title="Calendar">▦</button>
@@ -166,7 +166,7 @@ function removeEntry(date,eid){state.entries[date]=(state.entries[date]||[]).fil
 /* calendar */
 function renderCal(){
  var v=$('view'),y=view.getFullYear(),m=view.getMonth();
- v.innerHTML='<div class="head"><h2>'+view.toLocaleString('en',{month:'long',year:'numeric'})+'</h2><div class="nav"><button class="btn" id="prev" aria-label="Previous month">‹</button><button class="btn g" id="tdy">Today</button><button class="btn" id="next" aria-label="Next month">›</button></div></div><div class="dow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div><div class="grid" id="grid"></div><div class="day" id="day"></div>';
+ v.innerHTML='<div class="head"><h2>'+view.toLocaleString('en',{month:'long',year:'numeric'})+'</h2><div class="nav"><button class="btn" id="prev" aria-label="Previous month">‹</button><button class="btn g" id="tdy">Month</button><button class="btn" id="next" aria-label="Next month">›</button></div></div><div class="dow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div><div class="grid" id="grid"></div><div class="day" id="day"></div>';
  $('prev').onclick=function(){view.setMonth(view.getMonth()-1);render()};
  $('next').onclick=function(){view.setMonth(view.getMonth()+1);render()};
  $('tdy').onclick=function(){view=new Date();view.setDate(1);selDay=fmt(new Date());render()};
