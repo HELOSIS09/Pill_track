@@ -108,9 +108,27 @@ input:focus,textarea:focus,button:focus-visible,.cell:focus-visible,.pill:focus-
 var COLORS=['#a8d600','#4dd0e1','#ff6b9a','#ffa94d','#b197fc','#e8d44d','#ff7a59','#5eead4','#f472b6','#60a5fa','#c3e86d','#ff9ecd'];
 var KEY='progress-ide-v2';
 var state={pills:[],entries:{},dayNotes:{},notes:[],active:null};
-try{var s=localStorage.getItem(KEY);if(s)state=JSON.parse(s);else{var o=localStorage.getItem('progress-calendar-v1');if(o){var ov=JSON.parse(o);state.pills=ov.pills||[];state.entries=ov.entries||{}}}}catch(e){}
-state.dayNotes=state.dayNotes||{};state.notes=state.notes||[];state.entries=state.entries||{};
-if(!state.pills||!state.pills.length)state.pills=[{id:'p1',name:'Workout',color:COLORS[0]},{id:'p2',name:'Studied',color:COLORS[1]},{id:'p3',name:'Dermastamp',color:COLORS[2]}];
+var hasSavedState=false;
+try{
+ var s=localStorage.getItem(KEY);
+ if(s){state=JSON.parse(s);hasSavedState=true;}
+ else{
+  var o=localStorage.getItem('progress-calendar-v1');
+  if(o){var ov=JSON.parse(o);state.pills=ov.pills||[];state.entries=ov.entries||{};hasSavedState=true;}
+ }
+}catch(e){console.warn('Could not load saved habits:',e);}
+state=state||{};
+state.dayNotes=state.dayNotes||{};
+state.notes=state.notes||[];
+state.entries=state.entries||{};
+/* Add starter habits only on the very first visit.
+   An intentionally empty habit list must stay empty after refresh. */
+if(!hasSavedState)state.pills=[
+ {id:'p1',name:'Workout',color:COLORS[0]},
+ {id:'p2',name:'Studied',color:COLORS[1]},
+ {id:'p3',name:'Dermastamp',color:COLORS[2]}
+];
+state.pills=Array.isArray(state.pills)?state.pills:[];
 if(!state.notes.length){state.notes=[{id:'n1',title:'ideas.md',text:'# My first note\n- Use - for bullets, Enter keeps the list going\n  - Tab indents a sub-point\n- [ ] Tick me in the preview\n- [x] Done items get struck through\n1. Numbered lists work too\n\n## Tips\nWrap `code` or **bold** for colour.'}];state.active='n1'}
 if(!state.active)state.active=state.notes[0].id;
 var saveT;function save(){try{localStorage.setItem(KEY,JSON.stringify(state));var e=$('stSave');e.textContent='Saved '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}catch(x){}}
@@ -141,7 +159,7 @@ function renderSide(){
    nl.appendChild(el)});
   $('newN').onclick=function(){var id=uid();state.notes.push({id:id,title:'note'+(state.notes.length+1)+'.md',text:''});state.active=id;save();render()};
   return}
- sd.innerHTML='<h3>NEW HABIT</h3><div class="add"><input id="name" maxlength="20" placeholder="e.g. Workout" aria-label="Habit name"><button class="btn" id="addBtn">Add</button></div><div class="sws" id="sws"></div><h3 style="margin-top:16px">HABITS</h3><div id="palette"></div><div id="trash">Drop a placed habit here to remove it</div><div class="hint">Drag a habit onto a day, or tap a habit then tap days. Tap a day to see its details below the calendar.</div>';
+ sd.innerHTML='<h3>NEW HABIT</h3><div class="add"><input id="name" maxlength="20" placeholder="e.g. Workout" aria-label="Habit name"><button class="btn" id="addBtn">Add</button></div><div class="sws" id="sws"></div><h3 style="margin-top:16px">HABITS</h3><div id="palette"></div><div id="trash">Drop a placed habit here to remove it</div><div class="hint">Your habits are saved in this browser and stay in the list after refresh or when you return. Drag a habit onto a day, or tap a habit then tap days. Tap a day to see its details below the calendar.</div>';
  var sw=$('sws');COLORS.forEach(function(c){var b=document.createElement('button');b.className='sw'+(c===color?' on':'');b.style.background=c;b.setAttribute('aria-label','Colour '+c);b.onclick=function(){color=c;renderSide()};sw.appendChild(b)});
  var pal=$('palette');
  state.pills.forEach(function(pl){
