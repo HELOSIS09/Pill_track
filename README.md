@@ -1,4 +1,4 @@
-<div align="center">
+ <div align="center">
 
 # 📈 Progress Calendar
 
@@ -14,80 +14,78 @@
 
 ## 🌱 Why I built this
 
-I wanted one simple place to see, at a glance, **what I actually did each day**: workouts, study sessions, and any other habit I decide to track.
+I wanted one simple place to track my daily activities, build consistency, and see how I spend my time. From fitness and self-care to coding, studies, and writing, this project helps me keep everything organised in one place.
 
-Most habit apps felt either too heavy (accounts, subscriptions, notifications) or too plain (a single checkbox per day). I wanted something I could open, drop a coloured pill on a date, and instantly see my month. I also spend a lot of time in PyCharm, so I gave the whole thing the same dark teal look, which makes it feel like a tool I already use.
+The main activities I focus on are:
 
-The goals were:
+1. **Workout & Fitness** – Tracking workouts and staying consistent with training.
+2. **Dermastamp & Self-Care** – Keeping track of personal care routines.
+3. **Coding & Learning** – Practising Python, exploring technology, and learning new skills.
+4. **Blog Writing** – Working on tourism blogs and improving my writing.
+5. **Studies** – Managing academic learning and revision.
+6. **Productivity** – Tracking other personal habits and daily goals.
 
-1. **See progress honestly.** Every day card shows exactly which habits were done, so there is nowhere to hide.
-2. **Keep a notepad next to it.** Reflections and plans belong beside the calendar, not in another app.
-3. **Keep it mine.** No sign-up, no server, no tracking. Everything stays on my device.
-4. **Learn by building.** This is a small personal project made to practise front-end work.
-
-> **Transparency:** this project was built with help from an AI assistant (Claude), based on my requirements and iterations. I direct what it does and how it looks; the code was written collaboratively.
+> **Transparency:** This project was built with help from an AI assistant (Claude), based on my requirements and iterations. I guided its features, design, and improvements through continuous feedback.
 
 ---
 
 ## ✨ Features
 
 ### 📅 Calendar (`calendar.py` tab)
-- Create habit "pills" with a name and a colour (12 colours to choose from).
-- **Drag a pill onto any date**, or drag it between dates to move it.
-- On touch screens: tap a pill to select it, then tap dates to place it.
-- Large day cards that show every habit on that day, plus a done count such as `2/3`.
-- Click a day to open its details: tick habits on or off and add a short note that appears on the card.
-- Days where every habit is done get a green highlight.
+- Create custom habit pills with names and colours.
+- **Drag and drop habits** onto any date.
+- Select habits and place them on dates using touch screens.
+- View completed habits and daily progress.
+- Click a date to update habits and add notes.
+- Green highlights for days when all habits are completed.
 
 ### 📝 Notepad (`notes.md` tab)
-- Multiple notes, each with an editable title.
-- Line numbers and a monospace editor, like an IDE.
-- **Point-wise writing:** type `- ` for bullets, and Enter continues the list. Press Enter on an empty bullet to end it.
-- Numbered lists, `# Heading` and `## Heading`, `` `code` `` and `**bold**`.
-- Checklists with `- [ ]`. Tick them in the live preview and the note updates.
-- Tab indents a sub-point; sub-bullets get different colours.
-- Toolbar buttons for Bullet, Todo, numbered list, headings and indent.
-- **Autosaves**, so your notes are still there after you close the page.
+- Create multiple notes with editable titles.
+- Write plans, ideas, and daily reflections.
+- Support for bullet points, numbered lists, headings, and checklists.
+- Live preview with formatting options.
+- **Autosaves** your notes automatically.
 
 ### 📊 Stats (`stats.py` tab)
-- Percentage of active days this month.
-- Habits logged this month and days with progress in the last 30 days.
-- Current and best streak for every habit.
+- Monthly activity completion percentage.
+- Total habits logged and active days.
+- Current and best streaks for each habit.
 - Bar chart for the last 7 days and a 17-week heatmap.
 
 ### 💾 Backup
-- The **Backup** button shows all your data as text. Copy it to export, paste it to import on another device.
+- Export your data as text using the Backup button.
+- Copy and import your data on another device.
 
 ---
 
 ## 🚀 How to use
 
-1. Open `index.html` in any modern browser (or the hosted link, if you have one).
-2. Add a habit in the left panel and pick a colour.
-3. Drag it onto the days you did it.
-4. Click a day to add a note. Open **notes.md** for longer writing.
-5. Check **stats.py** to see your streaks.
+1. Open `index.html` in any modern browser.
+2. Add your daily activities as habits.
+3. Drag a habit onto the date you complete it.
+4. Click a day to update progress or add notes.
+5. Open **notes.md** for longer writing and **stats.py** to review your progress.
 
-No build step, no install. It is a single HTML file.
+No installation or dependencies required.
 
 ---
 
 ## 🧰 Built with
 
-- Plain **HTML, CSS and JavaScript** in one file
-- Your browser's `localStorage` for saving
-- System monospace fonts (nothing is downloaded)
+- Plain **HTML, CSS and JavaScript** in one file.
+- Browser **localStorage** for saving data.
+- System monospace fonts for a PyCharm-inspired interface.
 
 ---
 
 ## ⚠️ Honest limitations
 
-- **Data lives only in one browser on one device.** Clearing site data, or switching browser or phone, means starting empty unless you use Backup first.
-- **No automatic sync** and no accounts. Moving data is manual copy and paste.
-- A habit can be placed **once per day**; it records done or not done, not how much.
-- Backups are text you copy yourself, so remember to make one now and then.
-- Not tested on every browser and device. It is designed for current Chrome, Edge, Firefox and Safari, and may have rough edges.
-- Mobile works, but the layout is a simplified version of the desktop one.
+- **Data stays in one browser on one device.**
+- Clearing browser data may remove saved progress.
+- No automatic cloud sync or user accounts.
+- Habits can be recorded once per day.
+- Use the Backup option to transfer data between devices.
+- Mobile layout is simplified compared to desktop.
 
 ---
 
@@ -95,16 +93,16 @@ No build step, no install. It is a single HTML file.
 
 These are ideas only, not promises:
 
-- Download and upload backup files
-- Weekly goals per habit
-- Optional sync between devices
-- Light theme and more IDE colour schemes
+- Download and upload backup files.
+- Weekly goals for individual habits.
+- Optional sync between devices.
+- Light theme and more IDE colour schemes.
 
 ---
 
 ## 👤 Author
 
-Made by **Apurva Swarnkaar**, a hospitality and tourism student who likes building small tools that make daily work easier.
+Made by **Apurva Swarnkaar**, a hospitality and tourism student interested in technology, fitness, coding, and building useful tools.
 
 ## 📄 License
 
