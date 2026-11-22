@@ -83,26 +83,30 @@ input:focus,textarea:focus,button:focus-visible,.cell:focus-visible,.pill:focus-
 .nitem{display:flex;justify-content:space-between;gap:6px;padding:7px 10px;border-radius:8px;cursor:pointer;border-left:4px solid}.nitem:hover,.nitem.on{background:var(--sel)}.nitem .x{opacity:.5}
 .status{display:flex;align-items:center;gap:16px;padding:0 12px;background:var(--bg);border-top:1px solid var(--line);color:var(--soft);font-size:12px;overflow:hidden;white-space:nowrap}.status .sp{flex:1}
 @media (max-width:900px){body{overflow:auto;height:auto}.ide{height:auto;min-height:100%}.body{grid-template-columns:44px 1fr}.side{grid-column:2}.main{grid-column:1/3}.cell{min-height:92px;padding:4px}.chip{font-size:10px;padding:2px 5px}.chip .x{display:none}.nb{grid-template-columns:1fr}.note{display:none}}
+.cell.bad{background:rgba(255,77,77,.2);border-color:#ff4d4d}.cell.bad .amt{color:#ff6b6b}.cell.good{background:linear-gradient(160deg,#124a3d,var(--panel))}.amt{font-size:12px;font-weight:700;color:var(--g)}.mbar{height:6px;background:var(--deep);border-radius:6px;overflow:hidden}.mbar i{display:block;height:100%}.it{font-size:11px;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.it b{font-weight:400}.mrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px}.mrow select{background:var(--deep);border:1px solid var(--line);border-radius:8px;padding:8px}.exl{display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line)}.exl .x{cursor:pointer;color:var(--p)}.badge{color:#ff6b6b;font-weight:700}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <div class="ide">
- <div class="top"><div class="logo">PC</div><span class="proj">Progress</span><span class="br">⎇ master</span><span class="sp"></span><span class="br" id="clock"></span><button class="run" id="bkBtn" style="background:var(--c);margin-right:6px">⇅ Backup</button><button class="run" id="runBtn">▶ Today</button></div>
+ <div class="top"><div class="logo">PC</div><span class="proj">Progress</span><span class="br">⎇ master</span><span class="sp"></span><button class="run" id="bell" style="background:var(--p);color:#fff;margin-right:4px" title="Reminders">🔔 <b id="bellN">0</b></button><span class="br" id="clock"></span><button class="run" id="shBtn" style="background:var(--g);margin-right:6px">▦ Sheets</button><button class="run" id="bkBtn" style="background:var(--c);margin-right:6px">⇅ Backup</button><button class="run" id="runBtn">▶ Today</button></div>
  <div class="body">
   <nav class="strip" aria-label="Tools">
    <button class="tool on" data-v="cal" title="Calendar">▦</button>
    <button class="tool" data-v="notes" title="Notes">✎</button>
    <button class="tool" data-v="stats" title="Stats">◔</button>
+   <button class="tool" data-v="money" title="Expenses">₹</button>
+   <button class="tool" data-v="rem" title="Reminders">🔔</button>
   </nav>
   <aside class="side" id="side"></aside>
   <section class="main">
-   <div class="tabs"><button class="tab on" data-v="cal">calendar.py</button><button class="tab" data-v="notes">notes.md</button><button class="tab" data-v="stats">stats.py</button></div>
+   <div class="tabs"><button class="tab on" data-v="cal">calendar.py</button><button class="tab" data-v="notes">notes.md</button><button class="tab" data-v="stats">stats.py</button><button class="tab" data-v="money">expenses.py</button><button class="tab" data-v="rem">reminders.py</button></div>
    <div class="view" id="view"></div>
   </section>
  </div>
  <div class="status"><span id="stM"></span><span class="sp"></span><span id="stSave">Starting</span><span>UTF-8</span><span>4 spaces</span></div>
 </div>
+<div id="sh" style="display:none;position:fixed;inset:0;z-index:50;background:rgba(3,15,18,.75);align-items:center;justify-content:center;padding:16px"><div class="card" style="width:min(560px,100%);margin:0"><h3>GOOGLE SHEETS SYNC</h3><p class="hint" style="margin:0 0 8px">Paste your Apps Script web app URL and your secret key. Stored only in this browser. Works on your own site (for example GitHub Pages), not inside the claude.ai preview.</p><input class="fld" id="shUrl" style="width:100%;margin-bottom:8px" placeholder="https://script.google.com/macros/s/.../exec" aria-label="Web app URL"><input class="fld" id="shKey" style="width:100%" placeholder="Secret key" aria-label="Secret key"><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center"><button class="btn" id="shSave">Save and sync</button><button class="btn g" id="shOff">Disconnect</button><button class="btn g" id="shX">Close</button><span id="shMsg" style="color:var(--o);font-size:12px"></span></div></div></div>
 <div id="bk" style="display:none;position:fixed;inset:0;z-index:50;background:rgba(3,15,18,.75);align-items:center;justify-content:center;padding:16px"><div class="card" style="width:min(640px,100%);margin:0"><h3>BACKUP · EXPORT / IMPORT</h3><p class="hint" style="margin:0 0 8px">Export: press Copy and paste the text into a file or message to yourself. Import: paste a saved backup into the box and press Import. Importing replaces what is on this device.</p><textarea id="bkTa" class="fld" style="width:100%;height:220px;resize:vertical;font-size:12px" spellcheck="false" aria-label="Backup data"></textarea><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center"><button class="btn" id="bkCopy">Copy</button><button class="btn" id="bkFile" style="background:var(--y)">Save file</button><button class="btn" id="bkImp" style="background:var(--g)">Import</button><button class="btn g" id="bkX">Close</button><span id="bkMsg" style="color:var(--o);font-size:12px"></span></div></div></div>
 <script>
 (function(){
@@ -110,13 +114,14 @@ var COLORS=['#a8d600','#4dd0e1','#ff6b9a','#ffa94d','#b197fc','#e8d44d','#ff7a59
 var KEY='progress-ide-v2';
 var state={pills:[],entries:{},dayNotes:{},notes:[],active:null};
 try{var s=localStorage.getItem(KEY);if(s)state=JSON.parse(s);else{var o=localStorage.getItem('progress-calendar-v1');if(o){var ov=JSON.parse(o);state.pills=ov.pills||[];state.entries=ov.entries||{}}}}catch(e){}
-state.dayNotes=state.dayNotes||{};state.notes=state.notes||[];state.entries=state.entries||{};
+state.dayNotes=state.dayNotes||{};state.notes=state.notes||[];state.entries=state.entries||{};state.expenses=state.expenses||{};state.budget=state.budget||{def:500,days:{}};state.budget.days=state.budget.days||{};
 if(!state.pills||!state.pills.length)state.pills=[{id:'p1',name:'Workout',color:COLORS[0]},{id:'p2',name:'Studied',color:COLORS[1]},{id:'p3',name:'Dermastamp',color:COLORS[2]}];
 if(!state.notes.length){state.notes=[{id:'n1',title:'ideas.md',text:'# My first note\n- Use - for bullets, Enter keeps the list going\n  - Tab indents a sub-point\n- [ ] Tick me in the preview\n- [x] Done items get struck through\n1. Numbered lists work too\n\n## Tips\nWrap `code` or **bold** for colour.'}];state.active='n1'}
 if(!state.active)state.active=state.notes[0].id;
+state.pills.forEach(function(p){if(!p.created)p.created=Date.now()});
 var saveT,cloud=null,cloudT=null,cloudMsg='Local only',lastCore='',lastNotes='';
 function localWrite(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(x){}}
-function save(){state.ts=Date.now();localWrite();cloudQueue();paint()}
+function save(){state.ts=Date.now();localWrite();cloudQueue();sheetsQueue();paint()}
 var $=function(id){return document.getElementById(id)};
 function uid(){return Math.random().toString(36).slice(2,9)}
 function fmt(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
@@ -138,13 +143,22 @@ $('bkImp').onclick=function(){
  var d;try{d=JSON.parse($('bkTa').value)}catch(e){bkMsg('That is not valid backup text.');return}
  if(!d||!Array.isArray(d.pills)||typeof d.entries!=='object'){bkMsg('Backup is missing habits or entries.');return}
  if(!confirm('Replace everything on this device with this backup?'))return;
- state.pills=d.pills;state.entries=d.entries||{};state.dayNotes=d.dayNotes||{};state.notes=(d.notes&&d.notes.length)?d.notes:[{id:uid(),title:'untitled.md',text:''}];state.active=d.active&&state.notes.some(function(n){return n.id===d.active})?d.active:state.notes[0].id;
+ state.pills=d.pills;state.entries=d.entries||{};state.dayNotes=d.dayNotes||{};state.expenses=d.expenses||{};state.budget=d.budget||{def:500,days:{}};state.budget.days=state.budget.days||{};state.notes=(d.notes&&d.notes.length)?d.notes:[{id:uid(),title:'untitled.md',text:''}];state.active=d.active&&state.notes.some(function(n){return n.id===d.active})?d.active:state.notes[0].id;
  selected=null;save();$('bk').style.display='none';render()};
 $('runBtn').onclick=function(){view=new Date();view.setDate(1);selDay=fmt(new Date());setMode('cal')};
 
 /* sidebar */
 function renderSide(){
  var sd=$('side');
+ if(mode==='rem'){
+  sd.innerHTML='<h3>HOW REMINDERS WORK</h3><div class="hint" style="margin:0">A habit shows up here as overdue when it has not been done for more than 3 days. Logging it on any day resets the count. A habit you have never logged is counted from the day you added it.</div>';
+  return}
+ if(mode==='money'){
+  sd.innerHTML='<h3>DAILY BUDGET</h3><div class="add"><input id="bdef" type="number" min="0" placeholder="500" aria-label="Default daily budget"><button class="btn" id="bset">Set</button></div><div class="hint">Default budget for every day (in rupees). A day turns red when its spending goes over its budget. You can override one day inside the day details.</div><h3 style="margin-top:16px">CATEGORIES</h3><div id="cl"></div>';
+  $('bdef').value=state.budget.def;
+  $('bset').onclick=function(){state.budget.def=Math.max(0,+$('bdef').value||0);save();render()};
+  CATS.forEach(function(c){var d=document.createElement('div');d.className='pill';d.style.background=c[1];d.style.marginBottom='6px';d.style.cursor='default';d.textContent=c[0];$('cl').appendChild(d)});
+  return}
  if(mode==='notes'){
   sd.innerHTML='<h3>PROJECT › notes</h3><div id="nl"></div><button class="btn" id="newN" style="margin-top:10px;width:100%">+ New note</button><div class="hint">Notes save automatically in this browser and are still here when you reopen the page.</div>';
   var nl=$('nl');
@@ -167,7 +181,7 @@ function renderSide(){
    if(e.target.classList.contains('x')){if(confirm('Delete "'+pl.name+'" and remove it from every day?')){state.pills=state.pills.filter(function(q){return q.id!==pl.id});Object.keys(state.entries).forEach(function(d){state.entries[d]=state.entries[d].filter(function(en){return en.pill!==pl.id});if(!state.entries[d].length)delete state.entries[d]});if(selected===pl.id)selected=null;save();render()}return}
    selected=selected===pl.id?null:pl.id;render()});
   pal.appendChild(el)});
- function add(){var v=$('name').value.trim();if(!v)return;state.pills.push({id:uid(),name:v,color:color});color=COLORS[(COLORS.indexOf(color)+1)%COLORS.length];save();render()}
+ function add(){var v=$('name').value.trim();if(!v)return;state.pills.push({id:uid(),name:v,color:color,created:Date.now()});color=COLORS[(COLORS.indexOf(color)+1)%COLORS.length];save();render()}
  $('addBtn').onclick=add;$('name').addEventListener('keydown',function(e){if(e.key==='Enter')add()});
  var t=$('trash');
  t.addEventListener('dragover',function(e){if(drag&&drag.type==='entry'){e.preventDefault();t.classList.add('over')}});
@@ -247,6 +261,52 @@ function renderStats(){
  v.innerHTML=h+'</div></div>';
 }
 
+/* expenses */
+var CATS=[['Food','#ffa94d'],['Travel','#4dd0e1'],['Study','#b197fc'],['Shopping','#ff6b9a'],['Bills','#e8d44d'],['Other','#a8d600']];
+function money(n){return '\u20b9'+Math.round(n).toLocaleString('en-IN')}
+function daySpent(d){return(state.expenses[d]||[]).reduce(function(a,e){return a+e.amt},0)}
+function dayBudget(d){var v=state.budget.days[d];return(v===undefined||v===null)?(+state.budget.def||0):+v}
+function renderMoney(){
+ var v=$('view'),y=view.getFullYear(),m=view.getMonth(),pre=y+'-'+String(m+1).padStart(2,'0'),dim=new Date(y,m+1,0).getDate(),spent=0,over=0,bud=0,i;
+ for(i=1;i<=dim;i++){var k=pre+'-'+String(i).padStart(2,'0'),sp=daySpent(k),b=dayBudget(k);spent+=sp;bud+=b;if(b>0&&sp>b)over++}
+ var h='<div class="head"><h2>'+view.toLocaleString('en',{month:'long',year:'numeric'})+'</h2><div class="nav"><button class="btn" id="prev" aria-label="Previous month">\u2039</button><button class="btn g" id="tdy">Today</button><button class="btn" id="next" aria-label="Next month">\u203a</button></div></div>';
+ h+='<div class="kpis"><div class="kpi"><small>Spent this month</small><b style="color:var(--o)">'+money(spent)+'</b><small>of '+money(bud)+' budget</small></div><div class="kpi"><small>Left</small><b style="color:'+(spent>bud?'#ff6b6b':'var(--g)')+'">'+(spent>bud?'-':'')+money(Math.abs(bud-spent))+'</b><small>'+(spent>bud?'over budget':'remaining')+'</small></div><div class="kpi"><small>Days over budget</small><b style="color:'+(over?'#ff6b6b':'var(--g)')+'">'+over+'</b><small>this month</small></div></div>';
+ h+='<div class="dow"><div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div></div><div class="grid" id="grid"></div><div class="day" id="day"></div>';
+ v.innerHTML=h;
+ $('prev').onclick=function(){view.setMonth(view.getMonth()-1);render()};
+ $('next').onclick=function(){view.setMonth(view.getMonth()+1);render()};
+ $('tdy').onclick=function(){view=new Date();view.setDate(1);selDay=fmt(new Date());render()};
+ var g=$('grid'),first=new Date(y,m,1).getDay(),start=new Date(y,m,1-first),rows=Math.ceil((first+dim)/7),ts=fmt(new Date());
+ for(i=0;i<rows*7;i++){
+  var d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i),ds=fmt(d),sp2=daySpent(ds),bd=dayBudget(ds),list=state.expenses[ds]||[],isOver=bd>0&&sp2>bd,c=document.createElement('div');
+  c.className='cell'+(d.getMonth()!==m?' out':'')+(ds===ts?' today':'')+(ds===selDay?' sel':'')+(isOver?' bad':(list.length&&bd>0?' good':''));c.tabIndex=0;
+  var pc=bd>0?Math.min(100,sp2/bd*100):0;
+  var html='<div class="num"><b>'+d.getDate()+'</b><span class="amt">'+(list.length||bd?money(sp2)+(bd?' / '+money(bd):''):'')+'</span></div>';
+  if(bd>0&&(list.length))html+='<div class="mbar"><i style="width:'+pc+'%;background:'+(isOver?'#ff4d4d':'var(--g)')+'"></i></div>';
+  if(isOver)html+='<div class="badge" style="font-size:11px">Over by '+money(sp2-bd)+'</div>';
+  list.slice(0,4).forEach(function(e){html+='<div class="it"><b style="color:'+catColor(e.cat)+'">\u25cf</b> '+esc(e.item)+' '+money(e.amt)+'</div>'});
+  if(list.length>4)html+='<div class="it">+'+(list.length-4)+' more</div>';
+  c.innerHTML=html;
+  (function(ds,c){c.addEventListener('click',function(){selDay=ds;render()})})(ds,c);
+  g.appendChild(c)}
+ renderMoneyDay();
+}
+function catColor(c){var f=CATS.find(function(x){return x[0]===c});return f?f[1]:'#7ba5a8'}
+function renderMoneyDay(){
+ var dd=new Date(selDay+'T00:00:00'),el=$('day'),list=state.expenses[selDay]||[],sp=daySpent(selDay),bd=dayBudget(selDay);
+ var h='<h3>EXPENSES \u00b7 '+dd.toLocaleDateString('en',{weekday:'long',day:'numeric',month:'long',year:'numeric'})+'</h3><div>Spent <b style="color:'+(bd>0&&sp>bd?'#ff6b6b':'var(--g)')+'">'+money(sp)+'</b> of '+money(bd)+(bd>0&&sp>bd?' <span class="badge">over by '+money(sp-bd)+'</span>':'')+'</div>';
+ h+='<div class="mrow"><span style="color:var(--soft);font-size:12px">Budget for this day</span><input class="fld" id="dbud" type="number" min="0" style="max-width:130px" placeholder="default"></div>';
+ h+='<div class="mrow"><input class="fld" id="eit" maxlength="40" placeholder="What did you spend on?" style="min-width:160px"><input class="fld" id="eam" type="number" min="0" placeholder="Amount" style="max-width:110px"><select id="ecat" aria-label="Category">'+CATS.map(function(c){return '<option>'+c[0]+'</option>'}).join('')+'</select><button class="btn" id="eadd">Add</button></div><div id="exl" style="margin-top:10px"></div>';
+ el.innerHTML=h;
+ var db=$('dbud');var ov=state.budget.days[selDay];db.value=(ov===undefined||ov===null)?'':ov;
+ db.onchange=function(){if(db.value==='')delete state.budget.days[selDay];else state.budget.days[selDay]=Math.max(0,+db.value||0);save();render()};
+ function add(){var it=$('eit').value.trim(),am=+$('eam').value;if(!it||!(am>0))return;(state.expenses[selDay]=state.expenses[selDay]||[]).push({id:uid(),item:it,amt:am,cat:$('ecat').value});save();render()}
+ $('eadd').onclick=add;$('eam').addEventListener('keydown',function(e){if(e.key==='Enter')add()});
+ var ex=$('exl');
+ list.forEach(function(e){var r=document.createElement('div');r.className='exl';r.innerHTML='<span><b style="color:'+catColor(e.cat)+'">\u25cf</b> </span><span class="x" title="Delete">\u00d7</span>';r.firstChild.appendChild(document.createTextNode(e.item+' \u00b7 '+e.cat+' \u00b7 '+money(e.amt)));
+  r.querySelector('.x').onclick=function(){state.expenses[selDay]=state.expenses[selDay].filter(function(q){return q.id!==e.id});if(!state.expenses[selDay].length)delete state.expenses[selDay];save();render()};ex.appendChild(r)});
+ if(!list.length)ex.innerHTML='<div class="hint" style="margin:0">No expenses logged for this day yet.</div>';
+}
 /* notes */
 function nowNote(){return state.notes.find(function(n){return n.id===state.active})||state.notes[0]}
 function inline(t){return esc(t).replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>')}
@@ -288,15 +348,16 @@ function renderNotes(){
  gutter();renderPrev(n);
 }
 function render(){
- $('stM').textContent=mode==='cal'?'calendar.py':mode==='stats'?'stats.py':'notes.md';
- renderSide();if(mode==='cal')renderCal();else if(mode==='stats')renderStats();else renderNotes();
+ $('stM').textContent=mode==='cal'?'calendar.py':mode==='stats'?'stats.py':mode==='money'?'expenses.py':mode==='rem'?'reminders.py':'notes.md';
+ renderSide();fillRem();if(mode==='cal')renderCal();else if(mode==='stats')renderStats();else if(mode==='money')renderMoney();else if(mode==='rem')renderRem();else renderNotes();
 }
 function tick(){$('clock').textContent=new Date().toLocaleDateString('en',{weekday:'short',day:'numeric',month:'short'})}
 function bkAge(){if(!state.lastBackup)return{t:'no backup yet',old:true};var d=Math.floor((Date.now()-state.lastBackup)/864e5);return{t:d>=7?'backup is '+d+' days old':'backup '+(d?d+'d ago':'today'),old:d>=7}}
 function setStatus(m){cloudMsg=m;paint()}
 function paint(){var e=$('stSave'),b=bkAge();e.textContent=cloudMsg+' \u00b7 '+b.t;e.style.color=b.old?'var(--o)':'';e.style.cursor='pointer';e.title='Click to sync or back up'}
-$('stSave').onclick=function(){if(cloud)push(true);else $('bkBtn').click()};
-function coreStr(){return JSON.stringify({pills:state.pills,entries:state.entries,dayNotes:state.dayNotes,lastBackup:state.lastBackup||0})}
+$('stSave').onclick=function(){if(cloud)push(true);if(shCfg.url)sheetsPush();if(!cloud&&!shCfg.url)$('bkBtn').click()};
+function coreStr(){return JSON.stringify({pills:state.pills,entries:state.entries,dayNotes:state.dayNotes,lastBackup:state.lastBackup||0,expenses:state.expenses,budget:state.budget})}
+function applyCore(c){state.pills=c.pills;state.entries=c.entries||{};state.dayNotes=c.dayNotes||{};state.lastBackup=c.lastBackup||0;state.expenses=c.expenses||{};state.budget=c.budget||{def:500,days:{}};state.budget.days=state.budget.days||{}}
 function notesStr(){return JSON.stringify({notes:state.notes,active:state.active})}
 function cloudQueue(){if(!cloud)return;setStatus('Saving to account...');clearTimeout(cloudT);cloudT=setTimeout(function(){push(false)},1200)}
 async function push(force){
@@ -320,15 +381,65 @@ async function initCloud(){
   cloud=refs;
   if(a.exists&&b.exists&&(a.data().ts||0)>(state.ts||0)){
    var c=JSON.parse(a.data().json),n=JSON.parse(b.data().json);
-   state.pills=c.pills;state.entries=c.entries||{};state.dayNotes=c.dayNotes||{};state.lastBackup=c.lastBackup||0;
+   applyCore(c);
    state.notes=(n.notes&&n.notes.length)?n.notes:state.notes;state.active=n.active||state.notes[0].id;state.ts=a.data().ts;
    localWrite();lastCore=coreStr();lastNotes=notesStr();selected=null;render();
    setStatus('Restored from account '+new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
   }else{await push(true)}
  }catch(e){setStatus('Local only (cloud error)')}
 }
+var shCfg={},shT=null;try{shCfg=JSON.parse(localStorage.getItem('progress-sheets-cfg')||'{}')}catch(e){}
+function nowT(){return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}
+function expRows(){var r=[];Object.keys(state.expenses).sort().forEach(function(d){state.expenses[d].forEach(function(e){r.push([d,e.item,e.cat,e.amt,dayBudget(d)])})});return r}
+function sheetsQueue(){if(!shCfg.url)return;clearTimeout(shT);setStatus('Sheets: saving...');shT=setTimeout(sheetsPush,1500)}
+async function sheetsPush(){if(!shCfg.url)return;try{var r=await fetch(shCfg.url,{method:'POST',body:JSON.stringify({key:shCfg.key,core:coreStr(),notes:notesStr(),ts:state.ts||Date.now(),rows:expRows()})});var j=await r.json();if(j.error)throw new Error(j.error);setStatus('Sheets synced '+nowT())}catch(e){setStatus('Sheets failed, click to retry')}}
+async function sheetsInit(){if(!shCfg.url)return;setStatus('Sheets: connecting...');try{var r=await fetch(shCfg.url+(shCfg.url.indexOf('?')>-1?'&':'?')+'key='+encodeURIComponent(shCfg.key||''));var j=await r.json();if(j.error)throw new Error(j.error);
+ if(j.core&&(j.ts||0)>(state.ts||0)){applyCore(JSON.parse(j.core));var n=JSON.parse(j.notes||'{}');if(n.notes&&n.notes.length){state.notes=n.notes;state.active=n.active||n.notes[0].id}state.ts=j.ts;localWrite();selected=null;render();setStatus('Sheets restored '+nowT())}
+ else await sheetsPush()}catch(e){setStatus('Sheets unavailable (wrong URL/key, or blocked on this site)')}}
+$('shBtn').onclick=function(){$('sh').style.display='flex';$('shUrl').value=shCfg.url||'';$('shKey').value=shCfg.key||'';$('shMsg').textContent=''};
+$('shX').onclick=function(){$('sh').style.display='none'};
+$('shOff').onclick=function(){shCfg={};try{localStorage.removeItem('progress-sheets-cfg')}catch(e){}$('sh').style.display='none';setStatus('Sheets disconnected')};
+$('shSave').onclick=function(){var u=$('shUrl').value.trim(),k=$('shKey').value.trim();if(!/^https:\/\/script\.google\.com\//.test(u)||!k){$('shMsg').textContent='Enter the full script.google.com URL and a key.';return}shCfg={url:u,key:k};try{localStorage.setItem('progress-sheets-cfg',JSON.stringify(shCfg))}catch(e){}$('sh').style.display='none';sheetsInit()};
 paint();
-tick();render();initCloud();
+
+
+function pillStatus(){
+ var t=new Date(),t0=new Date(t.getFullYear(),t.getMonth(),t.getDate()),ts=fmt(t0);
+ return state.pills.map(function(p){var last=null;Object.keys(state.entries).forEach(function(d){if(d<=ts&&has(d,p.id)&&(!last||d>last))last=d});
+  var ref=last?new Date(last+'T00:00:00'):new Date(p.created||Date.now());ref=new Date(ref.getFullYear(),ref.getMonth(),ref.getDate());
+  return{p:p,last:last,never:!last,days:Math.round((t0-ref)/864e5)}}).sort(function(a,b){return b.days-a.days});
+}
+function renderRem(){
+ var v=$('view'),all=pillStatus(),late=all.filter(function(r){return r.days>3}),ok=all.filter(function(r){return r.days<=3});
+ var h='<div class="head"><h2>Reminders</h2></div><div class="kpis"><div class="kpi"><small>Need attention</small><b style="color:'+(late.length?'#ff7b7b':'var(--g)')+'">'+late.length+'</b><small>not done for more than 3 days</small></div><div class="kpi"><small>On track</small><b style="color:var(--g)">'+ok.length+'</b><small>done within 3 days</small></div></div>';
+ h+='<div class="card"><h3>NEEDS ATTENTION</h3><div id="rlate"></div></div><div class="card"><h3>ON TRACK</h3><div id="rok"></div></div>';
+ v.innerHTML=h;
+ function row(r,bad){var d=document.createElement('div');d.style.cssText='display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 12px;margin-top:8px;border-radius:10px;background:var(--deep);border-left:6px solid '+(bad?'#ff5c5c':r.p.color);
+  var txt=r.never?'Not logged yet, added '+r.days+' days ago':(r.days===0?'Done today':'Last done '+r.last+' ('+r.days+' day'+(r.days===1?'':'s')+' ago)');
+  d.innerHTML='<span><b style="color:'+r.p.color+'"></b><br><span style="font-size:12px;color:'+(bad?'#ff9b9b':'var(--soft)')+'"></span></span>';
+  d.querySelector('b').textContent=r.p.name;d.querySelectorAll('span')[1].textContent=(bad?'\u26a0 Not done for '+r.days+' days \u00b7 ':'')+txt;
+  var b=document.createElement('button');b.className='btn';b.textContent='Done today';b.onclick=function(){place(fmt(new Date()),r.p.id)};if(r.days===0&&!bad)b.style.display='none';d.appendChild(b);return d}
+ late.forEach(function(r){$('rlate').appendChild(row(r,true))});if(!late.length)$('rlate').innerHTML='<div class="hint" style="margin:0">Nothing overdue. Every habit was done in the last 3 days.</div>';
+ ok.forEach(function(r){$('rok').appendChild(row(r,false))});if(!ok.length)$('rok').innerHTML='<div class="hint" style="margin:0">No habits on track yet.</div>';
+}
+function overdue(){
+ var t=new Date(),t0=new Date(t.getFullYear(),t.getMonth(),t.getDate()),ts=fmt(t0),out=[];
+ state.pills.forEach(function(p){var last=null;Object.keys(state.entries).forEach(function(d){if(d<=ts&&has(d,p.id)&&(!last||d>last))last=d});
+  var ref=last?new Date(last+'T00:00:00'):new Date(p.created||Date.now());ref=new Date(ref.getFullYear(),ref.getMonth(),ref.getDate());
+  var days=Math.round((t0-ref)/864e5);if(days>3)out.push({p:p,days:days,never:!last})});
+ return out.sort(function(a,b){return b.days-a.days});
+}
+function fillRem(){
+ var o=overdue();$('bellN').textContent=o.length;var el=$('rem');if(!el)return;
+ var h='<h3>\U0001F514 REMINDERS</h3>';
+ if(!o.length)h+='<div class="hint" style="margin:0 0 14px">Every habit was done in the last 3 days.</div>';
+ else o.forEach(function(r){h+='<div style="border-left:5px solid '+r.p.color+';background:var(--deep);border-radius:8px;padding:7px 10px;margin-bottom:7px;font-size:12px"><b style="color:'+r.p.color+'">'+esc(r.p.name)+'</b><br>'+(r.never?'Not logged yet, added '+r.days+' days ago':'Not done for '+r.days+' days')+'</div>'});
+ if(window.Notification&&Notification.permission==='default')h+='<button class="btn g" id="alertBtn" style="width:100%;margin-bottom:14px">Enable pop-up alerts</button>';
+ el.innerHTML=h;var ab=$('alertBtn');if(ab)ab.onclick=function(){try{Notification.requestPermission().then(function(){fillRem()})}catch(e){}};
+}
+function notifyDue(){var o=overdue();if(o.length&&window.Notification&&Notification.permission==='granted'){try{new Notification('Habit reminder',{body:o.map(function(r){return r.p.name+' ('+r.days+' days)'}).join(', ')})}catch(e){}}}
+$('bell').onclick=function(){setMode('rem')};
+tick();render();setTimeout(notifyDue,1500);initCloud();sheetsInit();
 })();
 </script>
 </body>
